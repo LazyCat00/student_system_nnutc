@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.nnutc</groupId>
-    <artifactId>student_swing</artifactId>
+    <artifactId>student_system_swing</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
