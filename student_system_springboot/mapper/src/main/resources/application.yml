@@ -1,0 +1,11 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: jdbc:sqlserver://localhost:1433;DatabaseName=db_nnutc;encrypt=false
+    username: sa
+    password: 123456
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
+  type-aliases-package: com.nnutc.bean
