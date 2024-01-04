@@ -10,18 +10,12 @@ public class MainViewTableModel extends DefaultTableModel {
     static Vector<String> colums = new Vector<>();
 
     static {
-        colums.add("编号");
-        colums.add("姓名");
         colums.add("学号");
-        colums.add("家乡");
-        colums.add("语文");
-        colums.add("数学");
-        colums.add("英语");
-        colums.add("总分");
+        colums.add("姓名");
+        colums.add("性别");
     }
 
-
-
+//    单例
     private static MainViewTableModel mainViewTableModel = new MainViewTableModel();
 
     public static MainViewTableModel assembleModel(Vector<Vector<Object>> data) {

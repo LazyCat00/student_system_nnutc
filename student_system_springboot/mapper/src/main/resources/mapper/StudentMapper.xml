@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--mapper文件相当于DAO接口的‘实现类’，namespace属性要指定`实现`DAO接口的全限定名-->
+<mapper namespace="com.nnutc.dao.StudentMapper">
+    <resultMap id="stuMap" type="Student">
+        <id column="stu_id" property="stuId"/>
+        <result column="stu_name" property="stuName"/>
+        <result column="stu_gender" property="stuGender"/>
+    </resultMap>
+    <insert id="insertStu">
+        insert into tb_student(stu_name, stu_gender)
+        values (#{stuName}, #{stuGender})
+    </insert>
+    <select id="queryAllStu" resultMap="stuMap">
+        select stu_id, stu_name, stu_gender
+        from tb_student
+    </select>
+    <select id="queryStuByPage" resultMap="stuMap">
+        select stu_id, stu_name, stu_gender
+        from tb_student
+        ORDER BY stu_id
+        OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+    </select>
+
+    <select id="stuCount" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM tb_student;
+    </select>
+
+    <select id="queryFuzz" resultMap="stuMap">
+        SELECT *
+        FROM tb_student
+        WHERE stu_name LIKE CONCAT('%', #{fuzz}, '%')
+        ORDER BY stu_id
+        OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+    </select>
+    <update id="updateStu">
+        update tb_student
+        set stu_name=#{stuName},
+            stu_gender=#{stuGender}
+            where stu_id = #{stuId}
+    </update>
+
+    <delete id="deleteStu">
+        delete
+        from tb_student
+        where stu_id = #{stuId}
+    </delete>
+</mapper>

@@ -14,4 +14,5 @@ public class UserDAOTest {
         User user = userMapper.findUserByName("admin");
         System.out.println(user);
     }
+
 }

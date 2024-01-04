@@ -1,11 +1,10 @@
 package com.nnutc.view;
 
+import com.nnutc.common.ResultVO;
 import com.nnutc.component.BackGroundPanel;
 import com.nnutc.test.Test;
-import com.nnutc.utils.FailListener;
-import com.nnutc.utils.PostUtils;
-import com.nnutc.utils.ScreenUtils;
-import com.nnutc.utils.SuccessListener;
+import com.nnutc.utils.*;
+import com.nnutc.view.ext.ManagerInterface;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -74,17 +73,43 @@ public class MainInterface {
                 PostUtils.postWithParams("http://localhost:8080/user/login", params, new SuccessListener() {
                     @Override
                     public void success(String result) {
-
+                        ResultVO resultVO = JsonUtils.parseResult(result);
+                        System.out.println(resultVO);
+                        if (resultVO.getCode() == 20000) {
+                            //登录成功 展示主界面
+                            try {
+                                new ManagerInterface().init();
+                                jFrame.dispose();
+                            } catch (IOException ex) {
+                               ex.printStackTrace();
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(jFrame, "登录失败");
+                        }
                     }
                 }, new FailListener() {
                     @Override
                     public void fail() {
-
+                        JOptionPane.showMessageDialog(jFrame, "网络异常");
                     }
                 });
 
             }
         });
+        registerButton.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        try {
+                            new RegisterInterface().init();
+                        } catch (IOException exception) {
+                            exception.printStackTrace();
+                        }
+//                        当前界面消失
+                        jFrame.dispose();
+                    }
+                }
+        );
         buttonBox.add(loginButton);
         buttonBox.add(Box.createHorizontalStrut(100));
         buttonBox.add(registerButton);

@@ -1,5 +1,7 @@
 package com.nnutc.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -7,6 +9,7 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
@@ -41,6 +44,58 @@ public class PostUtils {
             response = httpClient.execute(httpPost);
 
 
+            // 从响应模型中获取响应实体
+            HttpEntity responseEntity = response.getEntity();
+
+            if (responseEntity != null) {
+                sListener.success(EntityUtils.toString(responseEntity));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            fListener.fail();
+        } finally {
+            try {
+                // 释放资源
+                if (httpClient != null) {
+                    httpClient.close();
+                }
+                if (response != null) {
+                    response.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void postWithJson(String url, Map<String, String> params, SuccessListener sListener, FailListener fListener) {
+
+        CloseableHttpClient httpClient = HttpClientBuilder.create().setDefaultCookieStore(CookiesHolder.getCookieStore()).build();
+        CloseableHttpResponse response = null;
+        try {
+
+            HttpPost httpPost = new HttpPost(url);
+            RequestConfig requestConfig = RequestConfig.custom()
+                    .setSocketTimeout(3000) //服务器响应超时时间
+                    .setConnectTimeout(3000) //连接服务器超时时间
+                    .build();
+
+            httpPost.setConfig(requestConfig);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+//            生成json对象
+            ObjectNode jsonObject = objectMapper.createObjectNode();
+            // 添加键值对到JSON对象中
+            params.forEach((key, value) -> {
+                jsonObject.put(key, value);
+            });
+            String jsonString = jsonObject.toString();
+            StringEntity entity = new StringEntity(jsonString, "UTF-8");
+
+            httpPost.setEntity(entity);
+            httpPost.setHeader("Content-Type", "application/json;charset=UTF-8");
+            // 由客户端执行(发送)请求
+            response = httpClient.execute(httpPost);
             // 从响应模型中获取响应实体
             HttpEntity responseEntity = response.getEntity();
 

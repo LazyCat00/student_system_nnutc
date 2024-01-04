@@ -14,7 +14,10 @@
         from tb_user
         where user_name=#{userName}
     </select>
-
+    <insert id="insertUser">
+        insert into tb_user( user_name, user_pwd)
+        values (#{userName}, #{userPwd})
+    </insert>
 
 
 </mapper>

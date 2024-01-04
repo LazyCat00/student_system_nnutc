@@ -21,7 +21,7 @@ public class MainViewTable extends JTable {
 //        行高
         setRowHeight(30);
 //        设置多行选择
-        getSelectionModel().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
     public void renderRuler(){
         //        设置表格列的渲染方式
